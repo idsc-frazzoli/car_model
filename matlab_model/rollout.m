@@ -1,3 +1,19 @@
+
+
+%%%%%%%%%%%%%%%%% forward integrates the car model in time
+% params: -x0[in] - initial state
+%         -u [in] - vector of inputs, dimension is p x N where p id num
+%            inputs and N is the number of samples
+%         -times [in] - vector of times to integrate (over dimension N)
+%         -params [global] - structure contatinig all the parameters of the
+%            car
+%         -x [out] - trajectory dimensin is n x N where n id the number of 
+%            states and N is the number od samples   
+%
+%  CALLER OF THIS FUNCTION MUST CLEAR THE PERSISTENT VARIABLES WITHIN 
+%   THE FUNCTION BETWEEN TWO CALLS (command: clear rollout)
+
+
 function [ x] = rollout( x0, u, times)
 
 global params;
@@ -27,23 +43,19 @@ x = zeros(size(x0,1),N);
 x(:,1) = x0;
 
 for i=2:N
-    
-    
-    
+      
     %temp = euler(@f, x(:,i-1), u(:,i), h);
     temp = rungeKutta(@f, x(:,i-1), u(:,i), h);
-    
-    
+       
     x(:,i) = avoidSingularity(temp);
-    
-    
+       
 end
 
 
 end
 
 
-function out = avoidSingularity(x)
+function out = avoidSingularity(x) % to avoid singularity if the model
 
 global params;
 
@@ -82,6 +94,7 @@ persistent xInt;
 if isempty(xInt)
     xInt = current;
 end
+
 k1 = f(current, input);
 k2 = f(current + h/2*k1, input);
 k3 = f(current + h/2*k2, input);
@@ -92,23 +105,23 @@ xInt = next;
 end
 
 
-function xInt = limitIntegrators(xInt)
+function xInt = limitIntegrators(xInt)  % to avoid singularity if the model
 
-% if xInt(7) < 0
-%     xInt(7) = 0;
-% end
-% 
-% if xInt(8) < 0
-%     xInt(8) = 0;
-% end
-% 
-% if xInt(9) < 0
-%     xInt(9) = 0;
-% end
-% 
-% if xInt(10) < 0
-%     xInt(10) = 0;
-% end
+if xInt(7) < 0
+    xInt(7) = 0;
+end
+
+if xInt(8) < 0
+    xInt(8) = 0;
+end
+
+if xInt(9) < 0
+    xInt(9) = 0;
+end
+
+if xInt(10) < 0
+    xInt(10) = 0;
+end
     
 end
 
@@ -160,7 +173,7 @@ else
 end
 end
 
-function [dX] = f(x, u)
+function [dX] = f(x, u) %evaluates the derivative of the car dynamics
 
 global params;
 persistent uPrev;
@@ -464,13 +477,15 @@ forces = forces(:);
 
 end
 
+
+% not sure why I have two of these robustDiv functions, but this setup worked fine
 function z = robustDiv(num,den, epsilon)
 
 if den == 0
     if num ~= 0
         z = num/epsilon;
     else
-        z = 0; %this is static friction let's say
+        z = 0; %clamp stuff to zero cause if the slips are zero there won't be aby force anyway
     end
 else
     z = num/den;
@@ -484,7 +499,7 @@ if den == 0
     if abs(num) > epsilon
         z = num/epsilon;
     else
-        z = 0; %this is static friction let's say
+        z = 0; 
     end
 else
     z = num/den;

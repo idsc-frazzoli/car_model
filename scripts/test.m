@@ -1,5 +1,7 @@
 % compare matlab and code
 addpath('../matlab_model')
+addpath('../misc')
+clear rollout %!!!!clear the persisitent variables, without this it ain't gonna work
 
 x0 = [params.Ux0 params.Uy0 params.r0 params.ksi0 params.x0 params.y0 params.w1L0 params.w1R0 params.w2L0 params.w2R0]';
 u = [ delta brake handbrake throttle]';
@@ -15,8 +17,8 @@ translucency = 0.1;
 axis equal
 grid on
 hold on
-xLimDown = -20;
-xLimUp = 50;
+xLimDown = -50;
+xLimUp = 80;
 yLimDown = xLimDown;
 yLimUp = xLimUp;
 N = max(size(x));
@@ -32,41 +34,6 @@ h1 = draw_car( x(end),y(end),ksi(end),params.frontL, params.rearL, params.width,
 h2 = draw_car(out(5,end),out(6,end),out(4,end),params.frontL, params.rearL, params.width,2,translucency);
 
 legend ([h1 h2], 'simulink', 'code')
-
-
-
-%%
-
-figure
-subplot(4,1,1)
-plot(time, w1L)
-hold on
-plot(time, out(7,:),'r')
-grid on
-ylabel('w1L [rad/s]')
-legend('simulink', 'code')
-
-subplot(4,1,2)
-plot(time, w1R)
-hold on
-grid on
-plot(time, out(8,:),'r')
-ylabel('w1R [rad/s]')
-
-subplot(4,1,3)
-plot(time, w2L)
-hold on
-grid on
-plot(time, out(9,:),'r')
-ylabel('w2L [rad/s]')
-
-subplot(4,1,4)
-plot(time, w2R)
-hold on
-grid on
-plot(time, out(10,:),'r')
-ylabel('w2R [rad/s]')
-
 
 
 
@@ -102,6 +69,37 @@ grid on
 plot(time, out(4,:)*180/pi,'r')
 ylabel('heading [deg]')
 %plot(time, y, 'g');
+
+%%
+figure
+subplot(4,1,1)
+plot(time, w1L)
+hold on
+plot(time, out(7,:),'r')
+grid on
+ylabel('w1L [rad/s]')
+legend('simulink', 'code')
+
+subplot(4,1,2)
+plot(time, w1R)
+hold on
+grid on
+plot(time, out(8,:),'r')
+ylabel('w1R [rad/s]')
+
+subplot(4,1,3)
+plot(time, w2L)
+hold on
+grid on
+plot(time, out(9,:),'r')
+ylabel('w2L [rad/s]')
+
+subplot(4,1,4)
+plot(time, w2R)
+hold on
+grid on
+plot(time, out(10,:),'r')
+ylabel('w2R [rad/s]')
 
 
 
