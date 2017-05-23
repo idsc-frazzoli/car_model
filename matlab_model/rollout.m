@@ -44,11 +44,9 @@ x(:,1) = x0;
 
 for i=2:N
       
-    %temp = euler(@f, x(:,i-1), u(:,i), h);
-    temp = rungeKutta(@f, x(:,i-1), u(:,i), h);
-       
-    x(:,i) = avoidSingularity(temp);
-       
+    x(:,i) = euler(@f, x(:,i-1), u(:,i), h);
+    %x(:,i) = rungeKutta(@f, x(:,i-1), u(:,i), h);
+              
 end
 
 
@@ -74,7 +72,7 @@ out = x;
 
 end
 
-function next = euler(f, current, input,h)
+function next = euler(f, current, input,h)  %this is implemented properly
 
 global params;
 persistent xInt;
@@ -84,10 +82,11 @@ end
 
 next = limitIntegrators(xInt + h * f(current, input));
 xInt = next;
+next = avoidSIngularity(next);
 
 end
 
-function next = rungeKutta(f, current, input, h)
+function next = rungeKutta(f, current, input, h)    % not sure whether this is properly implemented
 
 global params;
 persistent xInt;
@@ -95,13 +94,25 @@ if isempty(xInt)
     xInt = current;
 end
 
+
 k1 = f(current, input);
-k2 = f(current + h/2*k1, input);
-k3 = f(current + h/2*k2, input);
-k4 = f(current + h*k3, input);
+
+x = current + h/2*k1;
+x = avoidSingularity(x);
+k2 = f(x, input);
+
+x = current + h/2*k2;
+x = avoidSingularity(x);
+k3 = f(x, input);
+
+x = current + h*k3;
+x = avoidSingularity(x);
+k4 = f(x, input);
 
 next = limitIntegrators(xInt + (1/6)*(k1+2*k2+2*k3+k4)*h);
 xInt = next;
+next = avoidSingularity(next);
+
 end
 
 
@@ -175,16 +186,17 @@ end
 
 function [dX] = f(x, u) %evaluates the derivative of the car dynamics
 
+
+% params is a structure others are vectors
+% state vector [Ux Uy r Ksi x y w1L w1R w2L w2R]'
+% input vector [delta brake handbrake throttle]'
+
 global params;
 persistent uPrev;
 
 if isempty(uPrev)
     uPrev = u;
 end
-
-% params is a structure others are vectors
-% state vector [Ux Uy r Ksi x y w1L w1R w2L w2R]
-% input vector [delta brake handbrake throttle]
 
 % x(1) = deadZone(x(1), -params.Dz1, params.Dz1);
 % x(2) = deadZone(x(2), -params.Dz1, params.Dz1);
@@ -201,31 +213,24 @@ u(2) =rateLimiter(u(2), uPrev(2), params.maxBrakeRate);
 u(3) =rateLimiter(u(3), uPrev(3), params.maxHandbrakeRate);
 u(4) =rateLimiter(u(4), uPrev(4), params.maxThrottleRate);
 
-
-rollFric = params.m*params.g*params.muRoll;
 [ FORCES, forces] = tires(x,u);
-
 [brakeTorques] = brakes(x, u, forces);
 [torques] = motorTorques(u);
 
-
+rollFric = params.m*params.g*params.muRoll;
 du = 1/params.m*(deadZone(sum(FORCES(1:4)) + params.m*x(3)*x(2), -rollFric, rollFric)  - coulombFriction(x(1)));
-
-dv = 1/params.m*(deadZone(sum(FORCES(5:8)) - params.m*x(1)*x(2), -rollFric, rollFric) -  0*coulombFriction(x(2)));
-
+dv = 1/params.m*(deadZone(sum(FORCES(5:8)) - params.m*x(1)*x(3), -rollFric, rollFric) -  0*coulombFriction(x(2)));
 dr = 1/params.Iz * (params.lF*(sum(FORCES(5:6))) - params.lR*(sum(FORCES(7:8))) + params.lw * (FORCES(2) + FORCES(4) - FORCES(1) - FORCES(3)));
-
 dKsi = x(3);
-
 dx = x(1) * cos(x(4)) - x(2) * sin(x(4));
 dy = x(1) * sin(x(4)) + x(2) * cos(x(4));
-
 dw1L = 1/params.Iw * (torques(1) + brakeTorques(1) - forces(1)*params.R);
 dw1R = 1/params.Iw * (torques(2) + brakeTorques(2) - forces(2)*params.R);
 dw2L = 1/params.Iw * (torques(3) + brakeTorques(3) - forces(3)*params.R);
 dw2R = 1/params.Iw * (torques(4) + brakeTorques(4) - forces(4)*params.R);
 
 dX = [du dv dr dKsi dx dy dw1L dw1R dw2L dw2R]';
+
 uPrev = u;
 end
 
