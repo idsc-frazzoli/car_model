@@ -4,7 +4,7 @@ addpath('../misc')
 clear rollout %!!!!clear the persisitent variables, without this it ain't gonna work
 
 x0 = [params.Ux0 params.Uy0 params.r0 params.ksi0 params.x0 params.y0 params.w1L0 params.w1R0 params.w2L0 params.w2R0]';
-u = [ delta brake handbrake throttle]';
+u = [ delta brake handbrake throttle]'; %these are vectors of inputs saved to workspace from simulink (can also be defined here)
 out = rollout(x0, u, time);
 
 %plot all the stuff

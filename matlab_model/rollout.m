@@ -82,7 +82,7 @@ end
 
 next = limitIntegrators(xInt + h * f(current, input));
 xInt = next;
-next = avoidSIngularity(next);
+next = avoidSingularity(next);
 
 end
 
