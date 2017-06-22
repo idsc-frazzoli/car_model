@@ -1,6 +1,5 @@
-
-
-%%%%%%%%%%%%%%%%% forward integrates the car model in time
+function [ x] = rollout( x0, u, times)
+% forward integrates the car model in time
 % params: -x0[in] - initial state
 %         -u [in] - vector of inputs, dimension is p x N where p id num
 %            inputs and N is the number of samples
@@ -13,13 +12,8 @@
 %  CALLER OF THIS FUNCTION MUST CLEAR THE PERSISTENT VARIABLES WITHIN 
 %   THE FUNCTION BETWEEN TWO CALLS (command: clear rollout)
 
-
-function [ x] = rollout( x0, u, times)
-
 global params;
 global h;
-
-
 
 if (size(u, 2) ~= length(times))
     error('time and input vecotr are not the right dimensions');
@@ -48,7 +42,6 @@ for i=2:N
     %x(:,i) = rungeKutta(@f, x(:,i-1), u(:,i), h);
               
 end
-
 
 end
 
