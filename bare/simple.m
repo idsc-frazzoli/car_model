@@ -3,9 +3,9 @@ function simple
 close all
 global params
 
-clear rollout
+clear statespacemodel
 
-ctype_hatchback
+params = ctype_hatchback;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,7 +61,7 @@ u(4,:)=u_throttle;
 
 
 
-x=rollout( x0, u, times);
+x=statespacemodel( x0, u, times);
 
 ext=[
 times

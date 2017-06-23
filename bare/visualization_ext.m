@@ -1,4 +1,5 @@
 function visualization_ext(x,u,ext)
+% code by jph
 
 %[Ux Uy r Ksi x y w1L w1R w2L w2R]'
 

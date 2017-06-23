@@ -1,4 +1,5 @@
-function ctype_hatchback
+function params = ctype_hatchback
+% code by edo
 % initialization of parameters
 % these are valid fotr C-type hatchback that can be found in 
 % CarSim libraries
@@ -98,7 +99,7 @@ params.maxBrakeRate = 5; % 1/s
 params.maxHandbrakeRate = 5; % 1/s
 params.maxThrottleRate = 5; % 1/s
 
-disp(['maxDeltaRate = ' num2str(params.maxDeltaRate)])
+%disp(['maxDeltaRate = ' num2str(params.maxDeltaRate)])
 
 
 
