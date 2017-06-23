@@ -10,7 +10,7 @@ speed = 30 + 3.6*params.Dz1; % km/h
 
 % longitudinal and lateral speed in car coordiante frame [m/s]
 state0.Ux0  = speed/3.6;
-state0.Uy0  = 0;
+state0.Uy0  = 2;
 
 % wheel speeds [rad/s], rear and front
 state0.w1L0 = speed/3.6/params.R;
