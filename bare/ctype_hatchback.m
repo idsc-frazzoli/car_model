@@ -1,6 +1,7 @@
-%%%%%%%%
+function params = ctype_hatchback
+% code by edo
 % initialization of parameters
-% these are valid for C-type hatchback that can be found in 
+% these are valid fotr C-type hatchback that can be found in 
 % CarSim libraries
 
 global params;
@@ -93,55 +94,12 @@ params.Dz2 = 1*pi/180;
 params.T = 0.1;
 
 
-params.maxDeltaRate = 50 * pi/180; % rad/s TODO confirm with @jelavice
+params.maxDeltaRate = 50 * pi/ 180; % rad/s
 params.maxBrakeRate = 5; % 1/s
 params.maxHandbrakeRate = 5; % 1/s
 params.maxThrottleRate = 5; % 1/s
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%inital states 
-
-speed = 40 + 3.6*params.Dz1; % km/h
-
-% longitudinal and lateral speed in car coordiante frame [m/s]
-params.Ux0 = speed/3.6;
-params.Uy0 = 0;
-
-% wheel speeds [rad/s], rear and front
-params.w1L0 = speed/3.6/params.R;
-params.w1R0 = speed/3.6/params.R;
-params.w2L0 = speed/3.6/params.R;
-params.w2R0 = speed/3.6/params.R;
-params.WF0 = speed/3.6/params.R;
-params.WR0 = speed/3.6/params.R;
-% yawing rate [rad/s2]
-params.r0 = 0;
-
-% coordiantes of the car [m]
-params.x0 = 0;
-params.y0 = 0;
-
-%heading of the car [deg]
-params.ksi0 = 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+%disp(['maxDeltaRate = ' num2str(params.maxDeltaRate)])
 
 
 

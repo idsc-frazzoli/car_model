@@ -1,6 +1,5 @@
-
-
-%%%%%%%%%%%%%%%%% forward integrates the car model in time
+function [ x] = rollout( x0, u, times)
+% forward integrates the car model in time
 % params: -x0[in] - initial state
 %         -u [in] - vector of inputs, dimension is p x N where p id num
 %            inputs and N is the number of samples
@@ -13,13 +12,8 @@
 %  CALLER OF THIS FUNCTION MUST CLEAR THE PERSISTENT VARIABLES WITHIN 
 %   THE FUNCTION BETWEEN TWO CALLS (command: clear rollout)
 
-
-function [ x] = rollout( x0, u, times)
-
 global params;
 global h;
-
-
 
 if (size(u, 2) ~= length(times))
     error('time and input vecotr are not the right dimensions');
@@ -48,7 +42,6 @@ for i=2:N
     %x(:,i) = rungeKutta(@f, x(:,i-1), u(:,i), h);
               
 end
-
 
 end
 
@@ -385,15 +378,19 @@ Sy1R = (1+Sx1R) * robustDiv2(Uy1R, Ux1R, eps);
 Sx2L = robustDiv2(Ux2L - params.R*w2L, params.R*w2L, eps);
 Sy2L = (1+Sx2L) * robustDiv2(Uy2L, Ux2L, eps);
 
-Sx2R = robustDiv2(Ux1R - params.R*w2R, params.R*w2R, eps);
+% TODO @jelavice check: change from  Ux1R  to  Ux2R
+Sx2R = robustDiv2(Ux2R - params.R*w2R, params.R*w2R, eps);
 Sy2R = (1+Sx2R) * robustDiv2(Uy2R, Ux2R, eps);
 
+%S1L = sqrt( (Sx1L)^2 + (Sy1L)^2 );
+%S1R = sqrt( (Sx1R)^2 + (Sy1R)^2 );
+%S2L = sqrt( (Sx2L)^2 + (Sy2L)^2 );
+%S2R = sqrt( (Sx2R)^2 + (Sy2R)^2 );
 
-
-S1L = sqrt( (Sx1L)^2 + (Sy1L)^2 );
-S1R = sqrt( (Sx1R)^2 + (Sy1R)^2 );
-S2L = sqrt( (Sx2L)^2 + (Sy2L)^2 );
-S2R = sqrt( (Sx2R)^2 + (Sy2R)^2 );
+S1L = hypot(Sx1L, Sy1L);
+S1R = hypot(Sx1R, Sy1R);
+S2L = hypot(Sx2L, Sy2L);
+S2R = hypot(Sx2R, Sy2R);
 
 mu1L = params.D1*sin(params.C1*atan(params.B1*S1L));
 mu1R = params.D1*sin(params.C1*atan(params.B1*S1R));
@@ -439,10 +436,10 @@ H = K6 + params.lR;
 
 den = 2*(A*F - E*B - A*G + E*C + B*H - D*F - C*H + D*G);
 
-Fz1L = params.m*params.g*(B*G - C*F + B*H - D*F - C*H + D*G)/den;
+Fz1L =   params.m*params.g*(B*G - C*F + B*H - D*F - C*H + D*G)/den;
 Fz1R = - params.m*params.g*(A*G - E*C + A*H - E*D + C*H - D*G)/den;
-Fz2L = params.m*params.g*(A*F - E*B + A*H - E*D + B*H - D*F)/den;
-Fz2R = params.m*params.g*(A*F - E*B - A*G + E*C - B*G + C*F)/den;
+Fz2L =   params.m*params.g*(A*F - E*B + A*H - E*D + B*H - D*F)/den;
+Fz2R =   params.m*params.g*(A*F - E*B - A*G + E*C - B*G + C*F)/den;
 
 
 fx1L = params.mu*Fz1L*mux1L;

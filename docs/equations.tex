@@ -89,21 +89,21 @@ In Figure \ref{4wheelCar}, superscript $1L$ refers to the front left wheel, $1R$
 \dot{U_y}   & = \frac{1}{m} \left(F_y^{1L} + F_y^{1R} + F_y^{2L} + F_y^{2R}  \right)  - U_xr \\
 \dot{r}  & = \frac{1}{I_z}  \left( l_F \left(F_y^{1L} + F_y^{1R} \right) -l_R \left(F_y^{2L} + F_y^{2R} \right) + \frac{w}{2}\left(F_x^{1R} + F_x^{2R} - F_x^{1L} - F_x^{2L} \right)    \right) \\
 \dot{\psi}  & = r \\
-\dot{x}  & = U_xcos\psi - U_ysin\psi \\
-\dot{y}  & = U_xsin\psi + U_ycos\psi \\
+\dot{x}  & = U_x\cos\psi - U_y\sin\psi \\
+\dot{y}  & = U_x\sin\psi + U_y\cos\psi \\
 \dot{\omega}^{1L}  & = \frac{1}{I_{\omega}}\left( \hat{T}^{1L} - f_x^{1L}R\right)  \\
 \dot{\omega}^{1R}  & = \frac{1}{I_{\omega}}\left( \hat{T}^{1R} - f_x^{1R}R\right) \\ 
 \dot{\omega}^{2L}  & = \frac{1}{I_{\omega}}\left( \hat{T}^{2L} - f_x^{2L}R\right)  \\
 \dot{\omega}^{2R}  & = \frac{1}{I_{\omega}}\left( \hat{T}^{2R} - f_x^{2R}R\right) \label{4wheelCarEq10} \\ 
 \hat{T}^j& = \begin{cases}   T^j, \qquad \omega^j > 0 \\
 f_x^jR, \qquad \omega^j = 0 
-\end{cases}, where \quad j \in \{1L, 1R, 2L, 2R \} \label{discontinuous}
+\end{cases}, \text{ where } \quad j \in \{1L, 1R, 2L, 2R \} \label{discontinuous}
 \end{align}
 
 In equations \ref{4wheelCarEq1} - \ref{4wheelCarEq10} $w$ denotes width of the car. Superscript $1$ denotes the front wheel and superscript $2$ denotes the rear wheel. Subscript $x$ denotes longitudinal direction and subscript $y$ denotes lateral direction. For example, $f^1_x$ is a force on the front tire in the longitudinal direction (in the tire frame). $U_x$ and $U_y$ denote longitudinal and lateral velocities of the car, respectively. Yaw rate is denoted with $r$ and $\psi$ is the yaw angle (or heading angle). $m$ is a mass of the car and $I_z$ is a moment of inertia around the z-axis, $l_F$ is a distance between Center of Gravity (COG) and the front axle, $l_R$ is the distance between COG and the rear axle. $w$ is the distance from left to the right wheel. $R$ is the radius of the wheels. The rotational velocity of the wheels is denoted with $\omega$ and $\mu$ is a friction coefficient between the tire and the surface. Steering angle is denoted with $\delta$ and $T$ denotes torque applied to the wheels (those are inputs into the system). Lateral and longitudinal forces in the tire frame are calculated as follows:
 
 \begin{align}
-\mu^j & =Dsin(Carctan(Bs^j)) \label{4wheelPacejkaEq1}  \\
+\mu^j & =D\sin(C\arctan(Bs^j)) \label{4wheelPacejkaEq1}  \\
 \mu_i^j & = -\frac{s_i^j}{s^j}\mu^j   \\
 f_i^j & = \mu f_{z}^j \mu_i^j \label{lateralLongitudinal}  \\
 s_x^j & = \frac{v_x^j - \omega^jR}{\omega^jR}   \\
@@ -119,13 +119,13 @@ Relationship between forces in the car frame (red frame in Figure \ref{4wheelCar
 F^j_x  \label{forcesConversion1}\\
 F^j_y
 \end{bmatrix} & = \begin{bmatrix}
-cos\delta & -sin\delta \\
-sin\delta & cos\delta
+\cos\delta & -\sin\delta \\
+\sin\delta & \cos\delta
 \end{bmatrix} \begin{bmatrix}
 f^j_x \\
 f^j_y
 \end{bmatrix}
-where  \quad j \in \left\{ {1L,1R}\right\} \\
+\text{where}  \quad j \in \left\{ {1L,1R}\right\} \\
 \begin{bmatrix}
 F^j_x \\
 F^j_y
@@ -133,7 +133,7 @@ F^j_y
 f^j_x \\
 f^j_y
 \end{bmatrix}
-where  \quad j \in \left\{ {2L,2R}\right\} \label{forcesConversion3} \\
+\text{where}  \quad j \in \left\{ {2L,2R}\right\} \label{forcesConversion3} \\
 \end{align}
 
 Similar relations hold for velocities as well:
@@ -143,8 +143,8 @@ Similar relations hold for velocities as well:
 v^{1L}_x \\
 v^{1L}_y
 \end{bmatrix} & = \begin{bmatrix}
-cos\delta & sin\delta \\
--sin\delta & cos\delta
+\cos\delta & \sin\delta \\
+-\sin\delta & \cos\delta
 \end{bmatrix} \begin{bmatrix}
 U_x - r\frac{w}{2} \\
 U_y + r l_F
@@ -153,8 +153,8 @@ U_y + r l_F
 v^{1R}_x \\
 v^{1R}_y
 \end{bmatrix} & = \begin{bmatrix}
-cos\delta & sin\delta \\
--sin\delta & cos\delta
+\cos\delta & \sin\delta \\
+-\sin\delta & \cos\delta
 \end{bmatrix} \begin{bmatrix}
 U_x + r\frac{w}{2} \\
 U_y + r l_F
@@ -266,16 +266,16 @@ E &= K_1 - K2 - l_F \\
 F &= K_3 - K4 - l_F \\
 G &= K_5 + l_R \\
 H &= K_6 + l_R \\
-C_1 &= -\mu \mu^{1L}_x h sin(delta) \\
-C_2 &= -\mu \mu^{1L}_y h cos(delta) \\
-C_3 &= -\mu \mu^{1R}_x h sin(delta) \\
-C_4 &= -\mu \mu^{1R}_y h cos(delta) \\
+C_1 &= -\mu \mu^{1L}_x h \sin(\delta) \\
+C_2 &= -\mu \mu^{1L}_y h \cos(\delta) \\
+C_3 &= -\mu \mu^{1R}_x h \sin(\delta) \\
+C_4 &= -\mu \mu^{1R}_y h \cos(\delta) \\
 C_5 &= -\mu \mu^{2L}_y h  \\
 C_6 &= -\mu \mu^{2R}_y h  \\
-K_1 &= \mu \mu^{1L}_x h cos(\delta) \\
-K_2 &= \mu \mu^{1L}_y h sin(\delta) \\
-K_3 &= \mu \mu^{1R}_x h cos(\delta) \\
-K_4 &= \mu \mu^{1R}_y h sin(\delta) \\
+K_1 &= \mu \mu^{1L}_x h \cos(\delta) \\
+K_2 &= \mu \mu^{1L}_y h \sin(\delta) \\
+K_3 &= \mu \mu^{1R}_x h \cos(\delta) \\
+K_4 &= \mu \mu^{1R}_y h \sin(\delta) \\
 K_5 &= \mu \mu^{2L}_x h \\
 K_6 &= \mu \mu^{2R}_x h \\
 \end{align}
