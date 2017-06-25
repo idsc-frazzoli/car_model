@@ -29,7 +29,7 @@ params.width = 1.916;
 % front axle distance from COG [m]
 params.lF = 1.015;
 
-% rear axle distanc from COG [m]
+% rear axle distance from COG [m]
 params.lR = 1.895;
 
 % lateral distance of wheels from COG [m]

@@ -1,4 +1,5 @@
-function out = avoidSingularity(x) % to avoid singularity if the model
+function out = avoidSingularity(x) 
+% to avoid singularity if the model
 % code by edo
 
 global params;

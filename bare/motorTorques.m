@@ -6,6 +6,9 @@ global params;
 
 throttleCmd = u(4);
 
+% TODO check if sum of tmXY ==  throttleCmd
+% if so, divive by 2 could be appropriate
+
 reqTorque = params.maxTm * throttleCmd;
 
 Tm1L = (1-params.gammaM) * reqTorque;
