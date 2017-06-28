@@ -127,6 +127,7 @@ u(4) =rateLimiter(u(4), uPrev(4), params.maxThrottleRate);
 
 rollFric = params.m*params.g*params.muRoll;
 du = 1/params.m*(deadZone(sum(FORCES(1:4)) + params.m*x(3)*x(2), -rollFric, rollFric)  - coulombFriction(x(1)));
+% TODO ask about 0*fric
 dv = 1/params.m*(deadZone(sum(FORCES(5:8)) - params.m*x(1)*x(3), -rollFric, rollFric) -  0*coulombFriction(x(2)));
 dr = 1/params.Iz * (params.lF*(sum(FORCES(5:6))) - params.lR*(sum(FORCES(7:8))) + params.lw * (FORCES(2) + FORCES(4) - FORCES(1) - FORCES(3)));
 dKsi = x(3);

@@ -63,12 +63,14 @@ if handbrakeCmd > 0
     if w2L ~= 0
         Tb2L = Tb2L - handbrakeCmd * params.maxThb*sign(w2L);
     else
+% TODO check with edo if this is a mistake: missing "Tb2L - "
         Tb2L = fx2L * params.R;
     end
     
     if w2R ~= 0
         Tb2R = Tb2R - handbrakeCmd * params.maxThb*sign(w2R);
     else
+% TODO check with edo if this is a mistake: missing "Tb2R - "
         Tb2R = fx2R * params.R;
     end
 end
