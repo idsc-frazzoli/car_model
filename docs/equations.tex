@@ -100,7 +100,11 @@ f_x^jR, \qquad \omega^j = 0
 \end{cases}, \text{ where } \quad j \in \{1L, 1R, 2L, 2R \} \label{discontinuous}
 \end{align}
 
-In equations \ref{4wheelCarEq1} - \ref{4wheelCarEq10} $w$ denotes width of the car. Superscript $1$ denotes the front wheel and superscript $2$ denotes the rear wheel. Subscript $x$ denotes longitudinal direction and subscript $y$ denotes lateral direction. For example, $f^1_x$ is a force on the front tire in the longitudinal direction (in the tire frame). $U_x$ and $U_y$ denote longitudinal and lateral velocities of the car, respectively. Yaw rate is denoted with $r$ and $\psi$ is the yaw angle (or heading angle). $m$ is a mass of the car and $I_z$ is a moment of inertia around the z-axis, $l_F$ is a distance between Center of Gravity (COG) and the front axle, $l_R$ is the distance between COG and the rear axle. $w$ is the distance from left to the right wheel. $R$ is the radius of the wheels. The rotational velocity of the wheels is denoted with $\omega$ and $\mu$ is a friction coefficient between the tire and the surface. Steering angle is denoted with $\delta$ and $T$ denotes torque applied to the wheels (those are inputs into the system). Lateral and longitudinal forces in the tire frame are calculated as follows:
+In equations \ref{4wheelCarEq1} - \ref{4wheelCarEq10} $w$ denotes width of the car. Superscript $1$ denotes the front wheel and superscript $2$ denotes the rear wheel. Subscript $x$ denotes longitudinal direction and subscript $y$ denotes lateral direction. For example, $f^1_x$ is a force on the front tire in the longitudinal direction (in the tire frame). $U_x$ and $U_y$ denote longitudinal and lateral velocities of the car, respectively. Yaw rate is denoted with $r$ and $\psi$ is the yaw angle (or heading angle). 
+$m$ is a mass of the car.
+$I_z$ is a moment of inertia around the z-axis.
+$I_\omega$ is the wheel moment of inertia around axis of rotation of wheel.
+$l_F$ is a distance between Center of Gravity (COG) and the front axle, $l_R$ is the distance between COG and the rear axle. $w$ is the distance from left to the right wheel. $R$ is the radius of the wheels. The rotational velocity of the wheels is denoted with $\omega$ and $\mu$ is a friction coefficient between the tire and the surface. Steering angle is denoted with $\delta$ and $T$ denotes torque applied to the wheels (those are inputs into the system). Lateral and longitudinal forces in the tire frame are calculated as follows:
 
 \begin{align}
 \mu^j & =D\sin(C\arctan(Bs^j)) \label{4wheelPacejkaEq1}  \\
@@ -187,8 +191,8 @@ Still missing, are the expressions for computing vertical forces $F^j_z$ (note t
 Looking at the Figure \ref{4wheelYZplane} one obtains the first equation of four equations in total. The first equation is expressed in the equation \ref{YZtorqueBalance}; it is merely a balance of torques around the center of gravity. $h$ denotes the distance between COG and the ground.
 
 \begin{equation}
-\left(F^{2R}_z+F^{2L}_z \right)l_R + h\left(F^{1L}_x + F^{1R}_x + F^{2L}_x + F^{2R}_x\right) = \left(F^{1R}_z+F^{1L}_z \right)l_F \label{YZtorqueBalance}
-\end{equation}
+\left(F^{1L}_z+F^{2L}_z \right)\frac{w}{2} + h\left(F^{1L}_y + F^{1R}_y + F^{2L}_y + F^{2R}_y \right) = \left(F^{1R}_z+F^{2R}_z \right)\frac{w}{2} \label{XZtorqueBalance}
+\end{equation} 
 
 Second equation is obtained by looking at the torque balance in $x-z$ plane. Side view of the car is shown in Figure \ref{4wheelXZplane}.
 
@@ -202,13 +206,13 @@ Second equation is obtained by looking at the torque balance in $x-z$ plane. Sid
 Equation of torque balance in $x-z$ plane is given by:
 
 \begin{equation}
-\left(F^{1L}_z+F^{2L}_z \right)\frac{w}{2} + h\left(F^{1L}_y + F^{1R}_y + F^{2L}_y + F^{2R}_y \right) = \left(F^{1R}_z+F^{2R}_z \right)\frac{w}{2} \label{XZtorqueBalance}
-\end{equation} 
+\left(F^{2R}_z+F^{2L}_z \right)l_R + h\left(F^{1L}_x + F^{1R}_x + F^{2L}_x + F^{2R}_x\right) = \left(F^{1R}_z+F^{1L}_z \right)l_F \label{YZtorqueBalance}
+\end{equation}
 
 The third equation is given by:
 
 \begin{equation}
-F^{1L}_z+F^{1R}_z + F^{2L}_y + F^{2R}_y = mg\label{gravityBalance}
+F^{1L}_z+F^{1R}_z + F^{2L}_z + F^{2R}_z = mg\label{gravityBalance}
 \end{equation} 
 
 Where $m$ is mass and $g$ is gravitational acceleration. Finally, the last equation arises from geometrical considerations. In Figure \ref{deflectedPlane}, a deflected $x-y$ plane is shown. It is assumed that all the rotations happen around the COG.
@@ -224,7 +228,7 @@ From Figure \ref{deflectedPlane} it can be seen that deflection on the wheel $2R
 
 \begin{align}
 z^{1L} + z^{2R} &= 0 \label{deflections1}\\
-z^{1R} + z^{2L} &= 0 \label{deflections2}\\
+z^{1R} + z^{2L} &= 0 \label{deflections2}
 \end{align}
 
 If one sums up the equations \ref{deflections1} and \ref{deflections2}, one obtains:
@@ -262,8 +266,8 @@ A &= -\frac{w}{2} - C_1 - C_2 \\
 B &= \frac{w}{2} - C_3 - C_4 \\
 C &= -\frac{w}{2} - C_5 \\
 D &= \frac{w}{2} - C_6 \\
-E &= K_1 - K2 - l_F \\
-F &= K_3 - K4 - l_F \\
+E &= K_1 - K_2 - l_F \\
+F &= K_3 - K_4 - l_F \\
 G &= K_5 + l_R \\
 H &= K_6 + l_R \\
 C_1 &= -\mu \mu^{1L}_x h \sin(\delta) \\
