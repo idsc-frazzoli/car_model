@@ -1,10 +1,10 @@
-function [ x] = rollout( x0, u, times)
+function [ x] = rollout( x0, u, times, carParams)
 % forward integrates the car model in time
 % params: -x0[in] - initial state
 %         -u [in] - vector of inputs, dimension is p x N where p id num
 %            inputs and N is the number of samples
 %         -times [in] - vector of times to integrate (over dimension N)
-%         -params [global] - structure contatinig all the parameters of the
+%         -carParams - structure contatinig all the parameters of the
 %            car
 %         -x [out] - trajectory dimensin is n x N where n id the number of 
 %            states and N is the number od samples   
@@ -13,6 +13,7 @@ function [ x] = rollout( x0, u, times)
 %   THE FUNCTION BETWEEN TWO CALLS (command: clear rollout)
 
 global params;
+params = carParams;
 global h;
 
 if (size(u, 2) ~= length(times))
