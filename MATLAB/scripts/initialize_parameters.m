@@ -73,7 +73,7 @@ params.gammaM = 0;
 params.g = 9.81;
 
 % tire road friction coefficient
-params.mu = 0.85;
+params.mu = 0.53;
 
 %rolling friction coefficient
 params.muRoll = 0;

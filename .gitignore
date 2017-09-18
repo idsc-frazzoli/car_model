@@ -1,2 +1,7 @@
 slprj/
-
+build/
+*.m~
+*.o
+*.so
+*.a
+*.log
