@@ -8,47 +8,40 @@
 #ifndef PARAMETERS_H_
 #define PARAMETERS_H_
 
+namespace parameters {
 
-namespace parameters{
+struct ThreeStateModel {
+    //mass [kg]
+    const double m = 1412;
 
+    // yawing moment of inertia [kgm2]
+    static constexpr const double Iz = 1536.7 + 427.7084; // sprung mass inertia + unsprung mass inertia
 
-struct ThreeStateModel{
-	//mass [kg]
-	const double m = 1412;
+    // front axle distance from COG [m]
+    const double a = 1.015;
 
-	// yawing moment of inertia [kgm2]
-	static constexpr const double Iz = 1536.7 + 427.7084; // sprung mass inertia + unsprung mass inertia
+    // rear axle distanc from COG [m]
+    const double b = 1.895;
 
-	// front axle distance from COG [m]
-	const double a = 1.015;
+    // pacejka model parameters
+    static constexpr const double B1 = 13.8509;
+    static constexpr const double C1 = 1.367;
+    static constexpr const double D1 = 0.9622;
+    static constexpr const double B2 = 14.1663;
+    static constexpr const double C2 = 1.3652;
+    static constexpr const double D2 = 0.9744;
+    static constexpr const double B = (B1 + B2) / 2;
+    static constexpr const double C = (C1 + C2) / 2;
+    static constexpr const double D = (D1 + D2) / 2;
 
-	// rear axle distanc from COG [m]
-	const double b = 1.895;
+    // gravitational acceleration [m/s2]
+    const double g = 9.81;
 
-	// pacejka model parameters
-	static constexpr const double B1 = 13.8509;
-	static constexpr const double C1 = 1.367;
-	static constexpr const double D1 = 0.9622;
-	static constexpr const double B2  = 14.1663;
-	static constexpr const double C2  = 1.3652;
-	static constexpr const double D2  = 0.9744;
-	static constexpr const double B = (B1 + B2)/2;
-	static constexpr const double C = (C1 + C2)/2;
-	static constexpr const double D = (D1 + D2)/2;
-
-	// gravitational acceleration [m/s2]
-	const double g = 9.81;
-
-	// tire road friction coefficient
-	const double muF = 0.55;
-	const double muR = 0.53;
+    // tire road friction coefficient
+    const double muF = 0.55;
+    const double muR = 0.53;
 };
 
-
-
 } /* parameters*/
-
-
-
 
 #endif /* PARAMETERS_H_ */
