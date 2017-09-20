@@ -11,6 +11,7 @@
 #include "car_dynamics.h"
 #include "parameters.h"
 #include <memory>
+//#define DEBUG
 
 namespace car_dynamics {
 
