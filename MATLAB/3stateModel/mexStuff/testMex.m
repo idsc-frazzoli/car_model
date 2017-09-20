@@ -1,5 +1,6 @@
 % test the accuracy of the mex file
 
+addpath(genpath('..'))
 params = initialize_parameters_simple('carsim');
 
 N = 10000;
@@ -17,4 +18,4 @@ end
 
 end
 
-fprintf('Testing, %d / %d examples passed', k, N);
+fprintf('Testing, %d / %d examples passed \n', k, N);
