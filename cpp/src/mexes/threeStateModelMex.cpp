@@ -6,8 +6,8 @@
 #include <Eigen/Dense>
 
 
-using x_t = car_dynamics::ThreeStateModel::BASE::x_t;
-using u_t = car_dynamics::ThreeStateModel::BASE::u_t;
+using x_t = dynamics::ThreeStateModel::BASE::x_t;
+using u_t = dynamics::ThreeStateModel::BASE::u_t;
 
 
 static void wrapper( double* x, 
@@ -17,7 +17,7 @@ static void wrapper( double* x,
 {
 
     
-    static car_dynamics::ThreeStateModel *modelPtr = NULL;
+    static dynamics::ThreeStateModel *modelPtr = NULL;
     
     x_t xEig;
     u_t uEig;
@@ -31,7 +31,7 @@ static void wrapper( double* x,
     }
     
     if (modelPtr == NULL && cleanUp == false)
-        modelPtr = new car_dynamics::ThreeStateModel(xEig); // Create a  MyData object
+        modelPtr = new dynamics::ThreeStateModel(xEig); // Create a  MyData object
     
     if (modelPtr == NULL && cleanUp == true){
         flush(std::cout);

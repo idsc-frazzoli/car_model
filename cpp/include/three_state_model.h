@@ -8,32 +8,33 @@
 #ifndef THREE_STATE_MODEL_H_
 #define THREE_STATE_MODEL_H_
 
-#include "car_dynamics.h"
 #include "parameters.h"
 #include <memory>
+
+#include "system_dynamics.h"
 //#define DEBUG
 
-namespace car_dynamics {
+namespace dynamics {
 
-class ThreeStateModel: public CarDynamics<3, 2> {
+class ThreeStateModel: public SystemDynamics<3, 2> {
 
 public:
 
-    typedef CarDynamics<3, 2> BASE;
+    typedef SystemDynamics<3, 2> BASE;
     typedef std::unique_ptr<ThreeStateModel> ptr_t;
 
     ThreeStateModel(const BASE::x_t& x0) {
-        x_ = x0;
+        m_x = x0;
     }
 
     ThreeStateModel() {
-        x_ = BASE::x_t::Zero();
+        m_x = BASE::x_t::Zero();
     }
 
     virtual BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) override;
 
     BASE::x_t f(const BASE::u_t& u) {
-        return f(x_, u);
+        return f(m_x, u);
     }
     ;
 
@@ -50,10 +51,10 @@ private:
     double Fz_F();
     double Fz_R();
 
-    parameters::ThreeStateModel par_;
+    parameters::ThreeStateModel m_par;
 
 };
 
-} /* car_dynamics*/
+} /* dynamics*/
 
 #endif /* THREE_STATE_MODEL_H_ */

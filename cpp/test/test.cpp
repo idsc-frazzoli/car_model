@@ -19,12 +19,12 @@ int main() {
     std::cout << mat << std::endl;
 
     std::cout << "Instantiating threeState model class now:" << std::endl;
-    car_dynamics::ThreeStateModel threeStateModel;
-    car_dynamics::ThreeStateModel::ptr_t modelDerivedPtr = car_dynamics::ThreeStateModel::ptr_t(new car_dynamics::ThreeStateModel());
-    car_dynamics::ThreeStateModel::BASE::ptr_t modelBasePtr = car_dynamics::ThreeStateModel::BASE::ptr_t(new car_dynamics::ThreeStateModel());
+    dynamics::ThreeStateModel threeStateModel;
+    dynamics::ThreeStateModel::ptr_t modelDerivedPtr = dynamics::ThreeStateModel::ptr_t(new dynamics::ThreeStateModel());
+    dynamics::ThreeStateModel::BASE::ptr_t modelBasePtr = dynamics::ThreeStateModel::BASE::ptr_t(new dynamics::ThreeStateModel());
 
-    car_dynamics::ThreeStateModel::BASE::x_t x;
-    car_dynamics::ThreeStateModel::BASE::u_t u;
+    dynamics::ThreeStateModel::BASE::x_t x;
+    dynamics::ThreeStateModel::BASE::u_t u;
     x << 0.3, -1, 5;
     u << -10 * M_PI / 180, 100;
 
