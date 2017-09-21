@@ -1,6 +1,7 @@
 function [dx] = threeStateModel(x0,u0, params)
 
-
+% this is obsolete and no longer maintained
+% you are encouraged to use mex version instead
 
 beta = x0(1);
 r = x0(2);

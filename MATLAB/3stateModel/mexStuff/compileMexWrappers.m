@@ -12,5 +12,8 @@ includeDirs = [includeDirs '-I/usr/local/include/eigen3 '];
 sourceFiles = [cppSourceDir '/src/mexes/threeStateModelMex.cpp '];
 sourceFiles = [sourceFiles cppSourceDir '/src/three_state_model.cpp'];
 
+% make sure you compile with g++ version <= 4.9
+!g++ -v
+
 eval (['mex -v ' includeDirs sourceFiles]);
 
