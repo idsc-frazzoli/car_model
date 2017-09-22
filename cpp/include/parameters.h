@@ -10,18 +10,20 @@
 
 namespace parameters {
 
-struct ThreeStateModel {
+//TODO put this in a config file
+struct ThreeStateModel { //naming conflict
+
     //mass [kg]
-    const double m = 1412;
+    static constexpr const double m = 1412;
 
     // yawing moment of inertia [kgm2]
     static constexpr const double Iz = 1536.7 + 427.7084; // sprung mass inertia + unsprung mass inertia
 
     // front axle distance from COG [m]
-    const double a = 1.015;
+    static constexpr const double a = 1.015;
 
     // rear axle distanc from COG [m]
-    const double b = 1.895;
+    static constexpr const double b = 1.895;
 
     // pacejka model parameters
     static constexpr const double B1 = 13.8509;
@@ -35,11 +37,15 @@ struct ThreeStateModel {
     static constexpr const double D = (D1 + D2) / 2;
 
     // gravitational acceleration [m/s2]
-    const double g = 9.81;
+    static constexpr const double g = 9.81;
 
     // tire road friction coefficient
     const double muF = 0.55;
     const double muR = 0.53;
+
+    //FzF and FzR
+    static constexpr const double FzF =  m * g * b / (a + b);
+    static constexpr const double FzR = m *g * a/ (a+b);
 };
 
 } /* parameters*/

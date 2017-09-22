@@ -19,9 +19,8 @@ int main() {
     std::cout << mat << std::endl;
 
     std::cout << "Instantiating threeState model class now:" << std::endl;
+    //either shorter names for namespaces or using
     dynamics::ThreeStateModel threeStateModel;
-    dynamics::ThreeStateModel::ptr_t modelDerivedPtr = dynamics::ThreeStateModel::ptr_t(new dynamics::ThreeStateModel());
-    dynamics::ThreeStateModel::BASE::ptr_t modelBasePtr = dynamics::ThreeStateModel::BASE::ptr_t(new dynamics::ThreeStateModel());
 
     dynamics::ThreeStateModel::BASE::x_t x;
     dynamics::ThreeStateModel::BASE::u_t u;
@@ -29,8 +28,7 @@ int main() {
     u << -10 * M_PI / 180, 100;
 
     std::cout << threeStateModel.f(x, u).transpose() << std::endl;
-    //std::cout << modelDerivedPtr->f(x, u).transpose() << std::endl;
-    //std::cout << modelBasePtr->f(x, u).transpose() << std::endl;
+
 
     std::cout << "All good" << std::endl;
 

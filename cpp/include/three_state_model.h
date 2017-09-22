@@ -21,22 +21,10 @@ class ThreeStateModel: public SystemDynamics<3, 2> {
 public:
 
     typedef SystemDynamics<3, 2> BASE;
-    typedef std::unique_ptr<ThreeStateModel> ptr_t;
 
-    ThreeStateModel(const BASE::x_t& x0) {
-        m_x = x0;
-    }
+    ThreeStateModel() {}
 
-    ThreeStateModel() {
-        m_x = BASE::x_t::Zero();
-    }
-
-    virtual BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) override;
-
-    BASE::x_t f(const BASE::u_t& u) {
-        return f(m_x, u);
-    }
-    ;
+    BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) override;
 
     virtual ~ThreeStateModel() {
     }
@@ -48,8 +36,6 @@ private:
     double a_F(const BASE::x_t& x, double delta);
     double a_R(const BASE::x_t& x);
     double F_yPaj(double slip, double Fx, double Fz, double mu);
-    double Fz_F();
-    double Fz_R();
 
     parameters::ThreeStateModel m_par;
 
