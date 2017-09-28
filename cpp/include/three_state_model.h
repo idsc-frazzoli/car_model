@@ -5,12 +5,10 @@
  *      Author: jelavice
  */
 
-#ifndef THREE_STATE_MODEL_H_
-#define THREE_STATE_MODEL_H_
+#ifndef DYNAMICS_THREE_STATE_MODEL_H_
+#define DYNAMICS_THREE_STATE_MODEL_H_
 
 #include "parameters.h"
-#include <memory>
-
 #include "system_dynamics.h"
 //#define DEBUG
 

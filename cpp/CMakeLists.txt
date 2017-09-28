@@ -14,6 +14,12 @@ foreach(dir ${dirs})
 endforeach()
 
 add_library(threeStateModel src/three_state_model.cpp)
+add_library(kinematicModel src/kinematic_model.cpp)
+
+
+#add_library(threeStateModel SHARED src/three_state_model.cpp)
+#add_library(kinematicModel SHARED src/kinematic_model.cpp)
+
 
 add_executable(basicTest test/test.cpp)
 target_link_libraries(basicTest threeStateModel)

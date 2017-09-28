@@ -48,6 +48,13 @@ struct ThreeStateModel { //naming conflict
     static constexpr const double FzR = m *g * a/ (a+b);
 };
 
+
+struct KinematicModel {
+
+    const double L = 1;
+};
+
+
 } /* parameters*/
 
 #endif /* PARAMETERS_H_ */
