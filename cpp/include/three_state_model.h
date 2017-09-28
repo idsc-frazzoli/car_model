@@ -41,4 +41,4 @@ private:
 
 } /* dynamics*/
 
-#endif /* THREE_STATE_MODEL_H_ */
+#endif /* DYNAMICS_THREE_STATE_MODEL_H_ */
