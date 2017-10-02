@@ -20,9 +20,9 @@ BASE::x_t KinematicModel::f(const BASE::x_t& x, const BASE::u_t& u){
     double delta = u(0), v = u(1); //inputs
     double theta = x(2);
 
-    dx(0) =  v * cos(theta);
-    dx(2) = v * sin(theta);
-    dx(3) = v/m_par.L * tan(delta);
+    dx(0) = v * cos(theta);
+    dx(1) = v * sin(theta);
+    dx(2) = v / m_par.L * tan(delta);
 
     return dx;
 
