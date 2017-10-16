@@ -48,7 +48,7 @@ struct ThreeStateModel { //naming conflict
     static constexpr const double FzR = m *g * a/ (a+b);
 };
 
-
+//TODO config file config file config file
 struct KinematicModel {
 
     const double L = 1;

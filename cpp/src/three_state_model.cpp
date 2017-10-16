@@ -13,7 +13,7 @@ namespace dynamics {
 
 using BASE = ThreeStateModel::BASE;
 
-BASE::x_t ThreeStateModel::f(const BASE::x_t& x, const BASE::u_t& u) {
+BASE::x_t ThreeStateModel::f(const BASE::x_t& x, const BASE::u_t& u) const {
 
     double beta = x(0);
     double r = x(1);
@@ -45,7 +45,7 @@ BASE::x_t ThreeStateModel::f(const BASE::x_t& x, const BASE::u_t& u) {
 
 }
 
-double ThreeStateModel::Fy_F(const BASE::x_t& x, double delta) {
+double ThreeStateModel::Fy_F(const BASE::x_t& x, double delta) const {
 
 #ifdef DEBUG
     std::cout << "a_F: " << a_F(x,delta) << std::endl;
@@ -56,7 +56,7 @@ double ThreeStateModel::Fy_F(const BASE::x_t& x, double delta) {
     return F_yPaj(a_F(x, delta), 0.0, m_par.FzF, m_par.muF);
 }
 
-double ThreeStateModel::Fy_R(const BASE::x_t& x, double FxR) {
+double ThreeStateModel::Fy_R(const BASE::x_t& x, double FxR) const {
 
 #ifdef DEBUG
     std::cout << "a_R: " << a_R(x) << std::endl;
@@ -68,21 +68,21 @@ double ThreeStateModel::Fy_R(const BASE::x_t& x, double FxR) {
     return F_yPaj(a_R(x), FxR, m_par.FzR, m_par.muR);
 }
 
-double ThreeStateModel::a_F(const BASE::x_t& x, double delta) {
+double ThreeStateModel::a_F(const BASE::x_t& x, double delta) const {
     //beta - x(0)
     // r   - x(1)
     // Ux  - x(2)
     return atan(x(0) + m_par.a * x(1) / x(2)) - delta;
 }
 
-double ThreeStateModel::a_R(const BASE::x_t& x) {
+double ThreeStateModel::a_R(const BASE::x_t& x) const {
     //beta - x(0)
     // r   - x(1)
     // Ux  - x(2)
     return atan(x(0) - m_par.b * x(1) / x(2));
 }
 
-double ThreeStateModel::F_yPaj(double slip, double Fx, double Fz, double mu) {
+double ThreeStateModel::F_yPaj(double slip, double Fx, double Fz, double mu) const {
     double eps;
     if (mu * Fz < Fx)
         return 0;

@@ -22,20 +22,21 @@ public:
 
     ThreeStateModel() {}
 
-    BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) override;
+    BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) const override;
 
     virtual ~ThreeStateModel() {
     }
 
-private:
 
-    double Fy_F(const BASE::x_t& x, double delta);
-    double Fy_R(const BASE::x_t& x, double FxR);
-    double a_F(const BASE::x_t& x, double delta);
-    double a_R(const BASE::x_t& x);
-    double F_yPaj(double slip, double Fx, double Fz, double mu);
 
-    parameters::ThreeStateModel m_par;
+    double Fy_F(const BASE::x_t& x, double delta) const;
+    double Fy_R(const BASE::x_t& x, double FxR) const;
+    double a_F(const BASE::x_t& x, double delta) const;
+    double a_R(const BASE::x_t& x) const;
+    double F_yPaj(double slip, double Fx, double Fz, double mu) const;
+
+    //TODO fix this. No const
+    const parameters::ThreeStateModel m_par;
 
 };
 

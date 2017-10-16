@@ -13,7 +13,7 @@ namespace dynamics {
 
 using BASE = KinematicModel::BASE;
 
-BASE::x_t KinematicModel::f(const BASE::x_t& x, const BASE::u_t& u){
+BASE::x_t KinematicModel::f(const BASE::x_t& x, const BASE::u_t& u) const {
 
     BASE::x_t dx;
 

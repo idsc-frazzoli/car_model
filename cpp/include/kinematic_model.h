@@ -22,14 +22,15 @@ public:
 
     KinematicModel() {}
 
-    BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) override;
+    BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) const override;
 
     virtual ~KinematicModel() {
     }
 
 private:
 
-    parameters::KinematicModel m_par;
+    //TODO fix this no const
+    const parameters::KinematicModel m_par;
 
 };
 
