@@ -1,17 +1,19 @@
-function [ x] = rollout( x0, u, times, carParams)
+function [ x] = rollout( x0, u, times, carParams, model)
 % forward integrates the car model in time
 % params: -x0[in] - initial state
 %         -u [in] - vector of inputs, dimension is p x N where p id num
 %            inputs and N is the number of samples
+%            [delta brake handbrake throttle]'
 %         -times [in] - vector of times to integrate (over dimension N)
 %         -carParams - structure contatinig all the parameters of the
 %            car
 %         -x [out] - trajectory dimensin is n x N where n id the number of 
-%            states and N is the number od samples   
+%            states and N is the number od samples  [Ux Uy r Ksi x y w1L w1R w2L w2R]'
 %
 %  CALLER OF THIS FUNCTION MUST CLEAR THE PERSISTENT VARIABLES WITHIN 
 %   THE FUNCTION BETWEEN TWO CALLS (command: clear rollout)
 
+clear rollout %!!!!clear the persisitent variables, without this it ain't gonna work
 global params;
 params = carParams;
 global h;
@@ -33,15 +35,19 @@ for i =2:N
     end
 end
 
-
 x = zeros(size(x0,1),N);
 x(:,1) = x0;
 
+
 for i=2:N
-      
-    x(:,i) = euler(@f, x(:,i-1), u(:,i), h);
-    %x(:,i) = rungeKutta(@f, x(:,i-1), u(:,i), h);
-              
+    
+    if model == '10_states' 
+        x(:,i) = euler(@f, x(:,i-1), u(:,i), h);
+        %x(:,i) = rungeKutta(@f, x(:,i-1), u(:,i), h);
+    elseif model == '4_states'
+        x(:,i) = kinematic_model(x(:,i-1), u(:,i), h);
+
+    end
 end
 
 end
@@ -109,6 +115,26 @@ next = avoidSingularity(next);
 
 end
 
+function next = kinematic_model(current, input,h)  %this is implemented properly
+%[Ux Uy r Ksi x y w1L w1R w2L w2R]
+global params;
+persistent xInt;
+if isempty(xInt)
+    xInt = current;
+end
+
+next = kinIntegrators(xInt + h * f_kin(current, input)); % integrate x,y ksi, v. fake r,vy, betta, and wheelspeeds.
+next = avoidSingularity(next);
+xInt = next;
+Ux= next(1);
+r = Ux*tan(input(1))/(params.lf+params.lr);
+Uy= r*params.lr;
+W1L = 0;
+W1R = 0;
+W2L = 0;
+W2R = 0;
+next= [ Ux, Uy, r, next(4:6)', W1L W1R W2L W2R]';
+end
 
 function xInt = limitIntegrators(xInt)  % to avoid singularity if the model
 
@@ -314,7 +340,6 @@ end
 function [torques] = motorTorques(u)
 
 global params;
-
 
 throttleCmd = u(4);
 
