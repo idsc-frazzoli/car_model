@@ -1,5 +1,6 @@
 %global car_params
 %global sim_params
+
 close all
 clear all
 clear car_params
@@ -29,21 +30,21 @@ sim_params.u(3,:) = zeros(1,sim_params.N);
 sim_params.u(4,:) = linspace(0,0.3, sim_params.N); %
 
 sim_params= state(sim_params, car_params);
-X=  [X rollout(sim_params.x0, sim_params.u , sim_params.t, car_params)];
+X=  [X rollout(sim_params.x0, sim_params.u , sim_params.t, car_params, '10_states')];
 U= [U sim_params.u];
 %% Exp 2
-if (false)
+if (true)
 sim_params.vx_ini = 5; %km/h
 sim_params.vy_ini= 0; %km/h
 sim_params.r_ini=0;
 
-sim_params.u(1,:) = 0.3*zeros(1,sim_params.N); 
+sim_params.u(1,:) = 0.2*zeros(1,sim_params.N); 
 sim_params.u(2,:) = zeros(1,sim_params.N);   
 sim_params.u(3,:) = zeros(1,sim_params.N);
-sim_params.u(4,:) =  0.5*ones(1,sim_params.N);%linspace(0,0.3, sim_params.N); %0.1*ones(1,sim_params.N); %;%
+sim_params.u(4,:) =  linspace(0,0.3, sim_params.N); %0.1*ones(1,sim_params.N); %;%
 
 sim_params= state(sim_params, car_params);
-X=  [X rollout(sim_params.x0, sim_params.u , sim_params.t, car_params)];
+X=  [X rollout(sim_params.x0, sim_params.u , sim_params.t, car_params, '4_states')];
 U= [U sim_params.u];
 
 end
@@ -60,7 +61,7 @@ sim_params.u(3,:) = zeros(1,sim_params.N);
 sim_params.u(4,:) =  0.5*ones(1,sim_params.N);%linspace(0,0.3, sim_params.N); %0.1*ones(1,sim_params.N); %;%
 
 sim_params= state(sim_params, car_params);
-X=  [X  rollout(sim_params.x0, sim_params.u , sim_params.t, car_params)];
+X=  [X  rollout(sim_params.x0, sim_params.u , sim_params.t, car_params, '10_states')];
 U= [U sim_params.u];
 
 end
@@ -76,7 +77,7 @@ sim_params.u(3,:) = zeros(1,sim_params.N);
 sim_params.u(4,:) = linspace(0,0.2, sim_params.N); %0.1*ones(1,sim_params.N); %;%
 
 sim_params= state(sim_params, car_params);
-X=  [X  rollout(sim_params.x0, sim_params.u , sim_params.t, car_params)];
+X=  [X  rollout(sim_params.x0, sim_params.u , sim_params.t, car_params, '10_states')];
 U= [U sim_params.u];
 
 end

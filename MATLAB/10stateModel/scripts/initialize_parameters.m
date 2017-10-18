@@ -51,7 +51,7 @@ car_params.B2 = 14.1663; car_params.C2 = 1.3652; car_params.D2 = 0.9744;
 % car_params.B2 = 7; car_params.C2 = 1.4; car_params.D2 = 1;
 
 % maximal steering angle [deg]
-car_params.maxDelta = 30;
+car_params.maxDelta = 30*pi/180;
 
 % Nm per Mpa conversion constant [Nm/Mpa] for Front and Rear brakes
 car_params.press2torF = 250;

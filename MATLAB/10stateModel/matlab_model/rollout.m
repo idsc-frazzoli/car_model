@@ -23,7 +23,6 @@ if (size(u, 2) ~= length(times))
 end
 
 N = length(times);
-
 h = times(2) - times(1);
 for i =2:N
     if times(i) > times(i-1)
@@ -36,18 +35,26 @@ for i =2:N
 end
 
 x = zeros(size(x0,1),N);
+
+u_lim = zeros(size(u));
+u_sat = zeros(size(u));
 x(:,1) = x0;
-
-
+u_prev = u_lim(:,1);
 for i=2:N
-    
-    if model == '10_states' 
-        x(:,i) = euler(@f, x(:,i-1), u(:,i), h);
-        %x(:,i) = rungeKutta(@f, x(:,i-1), u(:,i), h);
-    elseif model == '4_states'
-        x(:,i) = kinematic_model(x(:,i-1), u(:,i), h);
 
+    u_sat(:,i) = saturation(u(:,i), -[params.maxDelta 1000000 1000000 1000000]', [params.maxDelta 1000000 1000000 1000000]');
+    u_lim(:,i)= rateLimiter(u_sat(:,i), u_prev, [params.maxDeltaRate params.maxBrakeRate params.maxHandbrakeRate params.maxThrottleRate]');
+    if strcmp (model, '10_states') 
+        
+        x(:,i) = euler(@f, x(:,i-1), u_lim(:,i), h);
+        %x(:,i) = rungeKutta(@f, x(:,i-1), u(:,i), h);
+    elseif strcmp (model, '4_states')
+        x(:,i) = kinematic_model(x(:,i-1), u_lim(:,i), h);
+    else
+        error('unkown model type');
     end
+    
+    u_prev = u_lim(:,i);
 end
 
 end
@@ -115,25 +122,26 @@ next = avoidSingularity(next);
 
 end
 
-function next = kinematic_model(current, input,h)  %this is implemented properly
+function next = kinematic_model(current, u,h)  %this is implemented properly
 %[Ux Uy r Ksi x y w1L w1R w2L w2R]
 global params;
-persistent xInt;
-if isempty(xInt)
-    xInt = current;
-end
 
-next = kinIntegrators(xInt + h * f_kin(current, input)); % integrate x,y ksi, v. fake r,vy, betta, and wheelspeeds.
-next = avoidSingularity(next);
-xInt = next;
+next = current + h * f_kin(current, u); % integrate x,y ksi, v. fake r,vy, betta, and wheelspeeds.
+%next = avoidSingularity(next);
+%xInt = next;
+
 Ux= next(1);
-r = Ux*tan(input(1))/(params.lf+params.lr);
-Uy= r*params.lr;
-W1L = 0;
-W1R = 0;
-W2L = 0;
-W2R = 0;
-next= [ Ux, Uy, r, next(4:6)', W1L W1R W2L W2R]';
+r = Ux*tan(u(1))/(params.lF+params.lR);
+Uy= r*params.lR;
+ksi = next (4);
+x= next(5);
+y= next(6);
+W1L = sqrt((Ux - r*params.lw)^2 + (Uy + r*params.lF)^2 )/params.R;
+W1R = sqrt((Ux + r*params.lw)^2 + (Uy + r*params.lF)^2 )/params.R;
+W2L = (Ux - r*params.lw)/params.R;
+W2R = (Ux + r*params.lw)/params.R;
+
+next= [ Ux, Uy, r, ksi, x, y, W1L W1R W2L W2R]';
 end
 
 function xInt = limitIntegrators(xInt)  % to avoid singularity if the model
@@ -171,14 +179,15 @@ end
 
 function y = saturation(x, low,high)
 
-if x > high
-    y = high;
-else if x < low
-        y = low;
-    else
-        y = x;
-    end
-end
+y = (x>high).*high + (x<low).*low + (x<= high & x>=low).*x;
+
+%if x > high
+%    y = high;
+%elseif x < low
+%    y = low;
+%else
+%    y = x;
+%end
 
 end
 
@@ -204,6 +213,21 @@ else
 end
 end
 
+function [dX] = f_kin(x, u) %evaluates the derivative of the car dynamics
+% params is a structure others are vectors
+% state vector [Ux Uy r Ksi x y w1L w1R w2L w2R]'
+% input vector [delta brake handbrake throttle]'
+
+global params;
+tan_delta = tan(u(1));
+tan_betta = (params.lR/(params.lR+params.lF))* tan_delta;
+
+du= u(4); % TODO (put a proper function of brake, throatel and handbrake
+dx = x(1)* (cos(x(4)) - tan_betta*sin(x(4)));
+dy = x(1)* (sin(x(4)) - tan_betta*cos(x(4)));
+dksi = x(1)*tan_delta /(params.lR +params.lF);
+dX= [du 0 0 dksi dx dy 0 0 0 0]';
+end
 function [dX] = f(x, u) %evaluates the derivative of the car dynamics
 
 
@@ -212,11 +236,10 @@ function [dX] = f(x, u) %evaluates the derivative of the car dynamics
 % input vector [delta brake handbrake throttle]'
 
 global params;
-persistent uPrev;
-
-if isempty(uPrev)
-    uPrev = u;
-end
+%persistent uPrev;
+%if isempty(uPrev)
+%    uPrev = u;
+%end
 
 % x(1) = deadZone(x(1), -params.Dz1, params.Dz1);
 % x(2) = deadZone(x(2), -params.Dz1, params.Dz1);
@@ -228,10 +251,10 @@ end
 % x(9) = deadZone(x(9), -params.Dz1/params.R, params.Dz1/params.R);
 % x(10) = deadZone(x(10), -params.Dz1/params.R, params.Dz1/params.R);
 
-u(1) =rateLimiter(u(1), uPrev(1), params.maxDeltaRate);
-u(2) =rateLimiter(u(2), uPrev(2), params.maxBrakeRate);
-u(3) =rateLimiter(u(3), uPrev(3), params.maxHandbrakeRate);
-u(4) =rateLimiter(u(4), uPrev(4), params.maxThrottleRate);
+%u(1) =rateLimiter(u(1), uPrev(1), params.maxDeltaRate);
+%u(2) =rateLimiter(u(2), uPrev(2), params.maxBrakeRate);
+%u(3) =rateLimiter(u(3), uPrev(3), params.maxHandbrakeRate);
+%u(4) =rateLimiter(u(4), uPrev(4), params.maxThrottleRate);
 
 [ FORCES, forces] = tires(x,u);
 [brakeTorques] = brakes(x, u, forces);
@@ -251,7 +274,7 @@ dw2R = 1/params.Iw * (torques(4) + brakeTorques(4) - forces(4)*params.R);
 
 dX = [du dv dr dKsi dx dy dw1L dw1R dw2L dw2R]';
 
-uPrev = u;
+%uPrev = u;
 end
 
 
