@@ -13,6 +13,17 @@ namespace dynamics {
 
 using BASE = ThreeStateModel::BASE;
 
+Eigen::Matrix<double, 2, 1> ThreeStateModel::getLinearVelocities(const BASE::x_t& x) {
+//    double Ux = x(2);
+//    double beta = x(0);
+//    double Uy = tan(beta) * Ux;
+    return Eigen::Matrix<double, 2, 1>(x(2), tan(x(0) * x(2)));
+}
+
+double ThreeStateModel::getAngularVelocity(const BASE::x_t& x) {
+    return x(1);
+}
+
 BASE::x_t ThreeStateModel::f(const BASE::x_t& x, const BASE::u_t& u) const {
 
     double beta = x(0);
@@ -23,7 +34,6 @@ BASE::x_t ThreeStateModel::f(const BASE::x_t& x, const BASE::u_t& u) const {
 
     double FyF = Fy_F(x, delta);
     double FyR = Fy_R(x, FxR);
-
 
 #ifdef DEBUG
     std::cout << "Beta in:  " << beta << std::endl;
@@ -91,7 +101,5 @@ double ThreeStateModel::F_yPaj(double slip, double Fx, double Fz, double mu) con
 
     return -eps * Fz * mu * m_par.D * std::sin(m_par.C * atan(m_par.B * slip));
 }
-
-
 
 } /* dynamics*/
