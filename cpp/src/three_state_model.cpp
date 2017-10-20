@@ -17,7 +17,7 @@ Eigen::Matrix<double, 2, 1> ThreeStateModel::getLinearVelocities(const BASE::x_t
 //    double Ux = x(2);
 //    double beta = x(0);
 //    double Uy = tan(beta) * Ux;
-    return Eigen::Matrix<double, 2, 1>(x(2), tan(x(0) * x(2)));
+    return Eigen::Matrix<double, 2, 1>(x(2), tan(x(0)) * x(2));
 }
 
 double ThreeStateModel::getAngularVelocity(const BASE::x_t& x) {
