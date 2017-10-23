@@ -13,18 +13,18 @@ namespace dynamics {
 
 using BASE = ThreeStateModel::BASE;
 
-Eigen::Matrix<double, 2, 1> ThreeStateModel::getLinearVelocities(const BASE::x_t& x) {
+Eigen::Matrix<double, 2, 1> ThreeStateModel::getLinearVelocitiesB(const BASE::x_t& x) const {
 //    double Ux = x(2);
 //    double beta = x(0);
 //    double Uy = tan(beta) * Ux;
     return Eigen::Matrix<double, 2, 1>(x(2), tan(x(0)) * x(2));
 }
 
-double ThreeStateModel::getAngularVelocity(const BASE::x_t& x) {
+double ThreeStateModel::getAngularVelocity(const BASE::x_t& x) const {
     return x(1);
 }
 
-BASE::x_t ThreeStateModel::f(const BASE::x_t& x, const BASE::u_t& u) const {
+BASE::x_t ThreeStateModel::f(const BASE::x_t& x, const BASE::u_t& u) {
 
     double beta = x(0);
     double r = x(1);

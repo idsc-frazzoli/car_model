@@ -23,7 +23,7 @@ public:
     static const int m_xDim = STATE_DIM;
     static const int m_uDim = INPUT_DIM;
 
-    virtual x_t f(const x_t& _x, const u_t& _u) const = 0;
+    virtual x_t f(const x_t& _x, const u_t& _u) = 0;
     virtual ~SystemDynamics() {
     }
 };

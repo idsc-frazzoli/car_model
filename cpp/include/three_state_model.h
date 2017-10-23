@@ -22,7 +22,7 @@ public:
 
     ThreeStateModel() {}
 
-    BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) const override;
+    BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) override;
 
     virtual ~ThreeStateModel() {
     }
@@ -32,8 +32,8 @@ public:
     double a_F(const BASE::x_t& x, double delta) const;
     double a_R(const BASE::x_t& x) const;
     double F_yPaj(double slip, double Fx, double Fz, double mu) const;
-    Eigen::Matrix<double, 2, 1> getLinearVelocities (const BASE::x_t& x);
-    double getAngularVelocity (const BASE::x_t& x);
+    Eigen::Matrix<double, 2, 1> getLinearVelocitiesB (const BASE::x_t& x) const;
+    double getAngularVelocity (const BASE::x_t& x) const;
 
     //TODO fix this. No const
     const parameters::ThreeStateModel m_par;

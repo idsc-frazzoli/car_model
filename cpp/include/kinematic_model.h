@@ -20,9 +20,13 @@ public:
 
     typedef SystemDynamics<3, 2> BASE;
 
-    KinematicModel() {}
+    KinematicModel(): m_u(BASE::u_t(0,0)) {}
 
-    BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) const override;
+    BASE::x_t f(const BASE::x_t& x, const BASE::u_t& u) override;
+
+    Eigen::Matrix<double, 2, 1> getLinearVelocitiesB (const BASE::x_t& x);
+
+    double getAngularVelocity (const BASE::x_t& x);
 
     virtual ~KinematicModel() {
     }
@@ -31,6 +35,8 @@ private:
 
     //TODO fix this no const
     const parameters::KinematicModel m_par;
+
+    BASE::u_t m_u;
 
 };
 
